@@ -1,0 +1,77 @@
+#include <iostream>
+#include <vector>
+#include <Windows.h>    
+
+#include <algorithm>
+
+using namespace std;
+
+// Функція для виведення масиву
+void printArray(vector<double>& arr) {
+    for (double elem : arr) {
+        cout << elem << " ";
+    }
+    cout << endl;
+}
+
+// Функція для обчислення суми прогресії
+double sumOfGeometricProgression(double firstTerm, double ratio, int n) {
+    return firstTerm * (pow(ratio, n) - 1) / (ratio - 1);
+}
+
+// Функція для сортування масиву методом абстрактного злиття
+void abstractMergeSort(vector<double>& arr, int left, int right) {
+    if (left < right) {
+        int mid = left + (right - left) / 2;
+        abstractMergeSort(arr, left, mid);
+        abstractMergeSort(arr, mid + 1, right);
+        merge(arr.begin() + left, arr.begin() + mid + 1, arr.begin() + mid + 1, arr.begin() + right + 1, arr.begin() + left);
+    }
+}
+
+// Функція для сортування масиву методом двохшляхового злиття
+void twoWayMergeSort(vector<double>& arr) {
+    stable_sort(arr.begin(), arr.end());
+}
+
+int main() {
+    int N;
+    double firstTerm, ratio;
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+
+    // Введення розміру масиву, першого члена та знаменника прогресії
+    cout << "Введіть розмір масиву (100<N<1000): ";
+    cin >> N;
+    cout << "Введіть значення першого члена прогресії: ";
+    cin >> firstTerm;
+    cout << "Введіть значення знаменника прогресії: ";
+    cin >> ratio;
+
+    vector<double> progressionArray(N);
+
+    // Заповнення масиву елементами геометричної прогресії
+    for (int i = 0; i < N; ++i) {
+        progressionArray[i] = firstTerm * pow(ratio, i);
+    }
+
+    // Виведення елементів масиву
+    cout << "Елементи масиву: ";
+    printArray(progressionArray);
+
+    // Сортування масиву методом абстрактного злиття
+    abstractMergeSort(progressionArray, 0, N - 1);
+    cout << "Після сортування абстрактним методом злиття: ";
+    printArray(progressionArray);
+
+    // Сортування масиву методом двохшляхового злиття
+    twoWayMergeSort(progressionArray);
+    cout << "Після сортування двохшляховим методом злиття: ";
+    printArray(progressionArray);
+
+    // Обчислення та виведення суми прогресії
+    double sum = sumOfGeometricProgression(firstTerm, ratio, N);
+    cout << "Сума прогресії: " << sum << endl;
+
+    return 0;
+}
